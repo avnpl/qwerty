@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id          String      @id @default(uuid())
+  fname       String
+  lname       String?
+  bio         String?
+  createdAt   DateTime    @default(now())
+  socials     socials?
+  inters      interests[]
+  matchFirst  matches[]   @relation("firstUser")
+  matchSecond matches[]   @relation("secondUser")
+
+  @@index([id])
+}
+
+model socials {
+  id       String  @id @default(uuid())
+  linkedin String?
+  github   String?
+  twitter  String?
+  kaggle   String?
+  user     user    @relation(fields: [userId], references: [id])
+  userId   String  @unique
+
+  @@index([userId])
+}
+
+enum interests {
+  AIML
+  WEBDEV
+  FRONTEND
+  BACKEND
+  FULLSTACK
+}
+
+model matches {
+  matched_at DateTime @default(now())
+  useroneId  String
+  usertwoId  String
+  userone    user     @relation(fields: [useroneId], references: [id], name: "firstUser")
+  usertwo    user     @relation(fields: [usertwoId], references: [id], name: "secondUser")
+  mfactor    Float
+
+  @@id([useroneId, usertwoId])
+  @@unique([useroneId, usertwoId])
+  @@index([useroneId, usertwoId])
+}

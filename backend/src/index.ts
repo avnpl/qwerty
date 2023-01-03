@@ -1,17 +1,11 @@
-import dotenv from "dotenv";
-import express, { Express, Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
+import express from "express";
 
-dotenv.config();
+const app = express();
+const prisma = new PrismaClient();
 
-const app: Express = express();
-const port = process.env.PORT;
+app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
-  res.status(200).send({
-    message: "Express + TS biatch!",
-  });
-});
-
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+const server = app.listen(8080, () => {
+	console.log("Server ready at http://localhost:8080");
 });

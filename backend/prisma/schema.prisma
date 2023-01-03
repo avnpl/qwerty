@@ -12,8 +12,9 @@ datasource db {
 
 model user {
   id          String      @id @default(uuid())
-  fname       String
-  lname       String?
+  username    String
+  email       String
+  name        String?
   bio         String?
   createdAt   DateTime    @default(now())
   socials     socials?
@@ -21,17 +22,16 @@ model user {
   matchFirst  matches[]   @relation("firstUser")
   matchSecond matches[]   @relation("secondUser")
 
-  @@index([id])
+  @@index([id, username, email])
 }
 
 model socials {
-  id       String  @id @default(uuid())
+  userId   String  @id @unique
+  user     user    @relation(fields: [userId], references: [id])
   linkedin String?
   github   String?
   twitter  String?
   kaggle   String?
-  user     user    @relation(fields: [userId], references: [id])
-  userId   String  @unique
 
   @@index([userId])
 }
@@ -45,14 +45,24 @@ enum interests {
 }
 
 model matches {
-  matched_at DateTime @default(now())
+  matched_at DateTime     @default(now())
   useroneId  String
   usertwoId  String
-  userone    user     @relation(fields: [useroneId], references: [id], name: "firstUser")
-  usertwo    user     @relation(fields: [usertwoId], references: [id], name: "secondUser")
+  userone    user         @relation(fields: [useroneId], references: [id], name: "firstUser")
+  usertwo    user         @relation(fields: [usertwoId], references: [id], name: "secondUser")
+  statone    Boolean
+  stattwo    Boolean
   mfactor    Float
+  mstatus    match_status
 
   @@id([useroneId, usertwoId])
   @@unique([useroneId, usertwoId])
-  @@index([useroneId, usertwoId])
+  @@index([useroneId, usertwoId, mstatus])
+}
+
+enum match_status {
+  MATCHED
+  REQUESTED
+  SUCCESS
+  REJECTED
 }

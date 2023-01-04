@@ -11,49 +11,56 @@ datasource db {
 }
 
 model user {
-  id          String      @id @default(uuid())
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  name        String?
   username    String
   email       String
-  name        String?
   bio         String?
-  createdAt   DateTime    @default(now())
+  inters      userInterest?
   socials     socials?
-  inters      interests[]
-  matchFirst  matches[]   @relation("firstUser")
-  matchSecond matches[]   @relation("secondUser")
+  matchFirst  matches[]     @relation("firstUser")
+  matchSecond matches[]     @relation("secondUser")
 
   @@index([id, username, email])
 }
 
+model interests {
+  interId      Int            @id
+  interestName String
+  userInters   userInterest[]
+}
+
+model userInterest {
+  userId     String    @id
+  interID    Int       @unique
+  user       user      @relation(fields: [userId], references: [id])
+  userInters interests @relation(fields: [interID], references: [interId])
+
+  @@unique([userId, interID])
+}
+
 model socials {
-  userId   String  @id @unique
-  user     user    @relation(fields: [userId], references: [id])
+  userId   String  @id
   linkedin String?
   github   String?
   twitter  String?
   kaggle   String?
+  user     user    @relation(fields: [userId], references: [id])
 
   @@index([userId])
-}
-
-enum interests {
-  AIML
-  WEBDEV
-  FRONTEND
-  BACKEND
-  FULLSTACK
 }
 
 model matches {
   matched_at DateTime     @default(now())
   useroneId  String
   usertwoId  String
-  userone    user         @relation(fields: [useroneId], references: [id], name: "firstUser")
-  usertwo    user         @relation(fields: [usertwoId], references: [id], name: "secondUser")
   statone    Boolean
   stattwo    Boolean
   mfactor    Float
   mstatus    match_status
+  userone    user         @relation(fields: [useroneId], references: [id], name: "firstUser")
+  usertwo    user         @relation(fields: [usertwoId], references: [id], name: "secondUser")
 
   @@id([useroneId, usertwoId])
   @@unique([useroneId, usertwoId])

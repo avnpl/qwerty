@@ -11,42 +11,45 @@ datasource db {
 }
 
 model user {
-  id          String        @id @default(uuid())
-  createdAt   DateTime      @default(now())
-  name        String?
+  userId      String         @id @default(uuid())
+  createdAt   DateTime       @default(now())
+  name        String
   username    String
   email       String
   bio         String?
-  inters      userInterest?
+  interests   userInterest[]
   socials     socials?
-  matchFirst  matches[]     @relation("firstUser")
-  matchSecond matches[]     @relation("secondUser")
+  matchFirst  matches[]      @relation("firstUser")
+  matchSecond matches[]      @relation("secondUser")
 
-  @@index([id, username, email])
+  @@index([userId, username, email])
 }
 
 model interests {
-  interId      Int            @id
-  interestName String
-  userInters   userInterest[]
+  interestId    Int            @id @default(sequence())
+  interestName  String         @unique
+  userInterests userInterest[]
+
+  @@index([interestId, interestName])
 }
 
 model userInterest {
-  userId     String    @id
-  interID    Int       @unique
-  user       user      @relation(fields: [userId], references: [id])
-  userInters interests @relation(fields: [interID], references: [interId])
+  userId        String
+  interestID    Int
+  user          user      @relation(fields: [userId], references: [userId])
+  userInterests interests @relation(fields: [interestID], references: [interestId])
 
-  @@unique([userId, interID])
+  @@id([userId, interestID])
+  @@index([userId, interestID])
 }
 
 model socials {
-  userId   String  @id
+  userId   String  @id @unique
   linkedin String?
   github   String?
   twitter  String?
   kaggle   String?
-  user     user    @relation(fields: [userId], references: [id])
+  user     user    @relation(fields: [userId], references: [userId])
 
   @@index([userId])
 }
@@ -59,8 +62,8 @@ model matches {
   stattwo    Boolean
   mfactor    Float
   mstatus    match_status
-  userone    user         @relation(fields: [useroneId], references: [id], name: "firstUser")
-  usertwo    user         @relation(fields: [usertwoId], references: [id], name: "secondUser")
+  userone    user         @relation(fields: [useroneId], references: [userId], name: "firstUser")
+  usertwo    user         @relation(fields: [usertwoId], references: [userId], name: "secondUser")
 
   @@id([useroneId, usertwoId])
   @@unique([useroneId, usertwoId])

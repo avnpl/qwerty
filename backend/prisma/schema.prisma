@@ -10,67 +10,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  userId      String         @id @default(uuid())
-  createdAt   DateTime       @default(now())
+model User {
+  userId      String      @id @default(uuid())
+  createdAt   DateTime    @default(now())
   name        String
-  username    String
-  email       String
+  username    String      @unique
+  email       String      @unique
   bio         String?
-  interests   userInterest[]
-  socials     socials?
-  matchFirst  matches[]      @relation("firstUser")
-  matchSecond matches[]      @relation("secondUser")
+  interests   Interests[] @relation("UserInterests")
+  socials     Socials?
+  matchFirst  Matches[]   @relation("firstUser")
+  matchSecond Matches[]   @relation("secondUser")
 
   @@index([userId, username, email])
 }
 
-model interests {
-  interestId    Int            @id @default(sequence())
-  interestName  String         @unique
-  userInterests userInterest[]
+model Interests {
+  interestId   Int    @id @default(sequence())
+  interestName String @unique
+  user         User[] @relation("UserInterests")
 
   @@index([interestId, interestName])
 }
 
-model userInterest {
-  userId        String
-  interestID    Int
-  user          user      @relation(fields: [userId], references: [userId])
-  userInterests interests @relation(fields: [interestID], references: [interestId])
-
-  @@id([userId, interestID])
-  @@index([userId, interestID])
-}
-
-model socials {
+model Socials {
   userId   String  @id @unique
   linkedin String?
   github   String?
   twitter  String?
   kaggle   String?
-  user     user    @relation(fields: [userId], references: [userId])
+  user     User    @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
 }
 
-model matches {
-  matched_at DateTime     @default(now())
-  useroneId  String
-  usertwoId  String
+model Matches {
+  matchId    String      @id @default(uuid())
+  matched_at DateTime    @default(now())
+  useroneId  String      @default("Anonymous")
+  usertwoId  String      @default("Anonymous")
   statone    Boolean
   stattwo    Boolean
   mfactor    Float
-  mstatus    match_status
-  userone    user         @relation(fields: [useroneId], references: [userId], name: "firstUser")
-  usertwo    user         @relation(fields: [usertwoId], references: [userId], name: "secondUser")
+  mstatus    MatchStatus
+  userone    User        @relation(fields: [useroneId], references: [userId], name: "firstUser", onDelete: SetDefault, onUpdate: Cascade)
+  usertwo    User        @relation(fields: [usertwoId], references: [userId], name: "secondUser", onDelete: SetDefault, onUpdate: Cascade)
 
-  @@id([useroneId, usertwoId])
   @@unique([useroneId, usertwoId])
-  @@index([useroneId, usertwoId, mstatus])
+  @@index([useroneId, usertwoId, mstatus, matchId])
 }
 
-enum match_status {
+enum MatchStatus {
   MATCHED
   REQUESTED
   SUCCESS

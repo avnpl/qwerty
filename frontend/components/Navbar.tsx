@@ -1,9 +1,9 @@
-import { useTheme } from "next-themes";
+import { useTheme } from 'next-themes'
 
-type Props = {};
+type Props = {}
 
 export default function Navbar({}: Props) {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme()
 
   return (
     <div className="flex justify-center">
@@ -12,12 +12,12 @@ export default function Navbar({}: Props) {
           <span className="font-light text-5xl">Qwerty</span>
           <div className="my-auto mx-2">
             <div>
-              {theme === "dark" ? (
+              {theme === 'dark' ? (
                 <button
                   aria-label="Toggle To Light Mode"
                   title="Toggle To Light Mode"
                   type="button"
-                  onClick={() => setTheme("light")}
+                  onClick={() => setTheme('light')}
                   className="w-10 h-10 rounded-lg flex items-center justify-center border-2 border-neutral-200 hover:border-neutral-700"
                 >
                   <svg
@@ -41,7 +41,7 @@ export default function Navbar({}: Props) {
                   title="Toggle To Dark Mode"
                   type="button"
                   className="w-10 h-10 rounded-lg flex items-center justify-center border-2 border-neutral-700 hover:border-black"
-                  onClick={() => setTheme("dark")}
+                  onClick={() => setTheme('dark')}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -64,5 +64,5 @@ export default function Navbar({}: Props) {
         </div>
       </nav>
     </div>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import "./index.css";
-import Navbar from "../components/Navbar";
+import './index.css'
+import Navbar from '../components/Navbar'
 
 function App() {
   return (
@@ -7,7 +7,7 @@ function App() {
       <Navbar />
       <h1 className="text-4xl">React + Vite</h1>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

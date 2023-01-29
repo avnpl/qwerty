@@ -75,8 +75,6 @@ const userData: Prisma.UserCreateInput[] = [
   },
 ]
 
-const userInterestData: Prisma.InterestsCreateInput[] = []
-
 async function main() {
   console.log('Seeding test interests...')
   for (const i of interestData) {
@@ -84,7 +82,7 @@ async function main() {
       data: i,
     })
     console.log(
-      `Created ${interest.interestName} with id: ${interest.interestId}"`
+      `Created ${interest.interestName} with id: ${interest.interestId}`
     )
   }
 
@@ -93,7 +91,7 @@ async function main() {
     const user = await prisma.user.create({
       data: u,
     })
-    console.log(`Created ${user.username} with id: ${user.userId}"`)
+    console.log(`Created ${user.username} with id: ${user.userId}`)
   }
 
   console.log('Disconnecting viraj test interest')

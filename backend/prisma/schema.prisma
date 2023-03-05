@@ -13,8 +13,9 @@ datasource db {
 model User {
   userId      String      @id @default(uuid())
   createdAt   DateTime    @default(now())
-  name        String
+  name        String      @default("password")
   username    String      @unique
+  password    String
   email       String      @unique
   bio         String?
   interests   Interests[] @relation("UserInterests")

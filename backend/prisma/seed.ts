@@ -15,6 +15,7 @@ const userData: Prisma.UserCreateInput[] = [
     email: 'alvin.pauly@vit.edu.in',
     name: 'Alvin Pauly',
     username: 'avnpl',
+    password: 'avnplpass',
     bio: 'Hello from avnpl',
     interests: {
       connect: [
@@ -28,6 +29,7 @@ const userData: Prisma.UserCreateInput[] = [
     email: 'kaartik.nayak@vit.edu.in',
     name: 'Kartik Nayak',
     username: 'kanay',
+    password: 'kanaypass',
     bio: 'Hello from kanay',
     interests: {
       connect: [
@@ -41,6 +43,7 @@ const userData: Prisma.UserCreateInput[] = [
     email: 'viren.rajhauns@vit.edu.in',
     name: 'Viren Rajhauns',
     username: 'viraj',
+    password: 'virajpass',
     bio: 'Hello from viraj',
     interests: {
       connectOrCreate: [
@@ -59,6 +62,7 @@ const userData: Prisma.UserCreateInput[] = [
     email: 'rohini.malladi@vit.edu.in',
     name: 'Rohini Malladi',
     username: 'romal',
+    password: 'romalpass',
     bio: 'Hello from romal',
     interests: {
       connect: [{ interestName: 'AIML' }, { interestName: 'FULLSTACK' }],
@@ -68,6 +72,7 @@ const userData: Prisma.UserCreateInput[] = [
     email: 'monke@vit.edu.in',
     name: 'Monke',
     username: 'monke',
+    password: 'monkepass',
     bio: 'Hello from monke',
     interests: {
       connect: [{ interestName: 'WEBDEV' }, { interestName: 'FULLSTACK' }],

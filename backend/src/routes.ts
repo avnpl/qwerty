@@ -31,4 +31,19 @@ router.post('/api/adduser', async (req, res) => {
   })
 })
 
+router.get('/api/getuser', async (req, res) => {
+  const { username, password } = req.body
+
+  const user = await prisma.user.findFirst({
+    where: {
+      username: username,
+      password: password,
+    },
+  })
+
+  res.send({
+    user,
+  })
+})
+
 export { router }

@@ -46,4 +46,18 @@ router.get('/api/getuser', async (req, res) => {
   })
 })
 
+router.delete('/api/deleteuser', async (req, res) => {
+  const { username } = req.body
+
+  const user = await prisma.user.delete({
+    where: {
+      username: username,
+    },
+  })
+
+  res.send({
+    user,
+  })
+})
+
 export { router }

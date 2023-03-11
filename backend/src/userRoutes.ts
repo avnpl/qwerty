@@ -1,16 +1,16 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
 
-const router = express.Router()
+const userRoutes = express.Router()
 const prisma = new PrismaClient()
 
-router.get('/', (req, res) => {
+userRoutes.get('/', (req, res) => {
   res.send({
     message: 'bruh',
   })
 })
 
-router.post('/api/adduser', async (req, res) => {
+userRoutes.post('/api/adduser', async (req, res) => {
   const { email, name, username, password, bio, interests } = req.body
 
   const user = await prisma.user.create({
@@ -31,13 +31,16 @@ router.post('/api/adduser', async (req, res) => {
   })
 })
 
-router.get('/api/getuser', async (req, res) => {
+userRoutes.get('/api/getuser', async (req, res) => {
   const { username, password } = req.body
 
   const user = await prisma.user.findFirst({
     where: {
       username: username,
       password: password,
+    },
+    include: {
+      interests: true,
     },
   })
 
@@ -46,8 +49,25 @@ router.get('/api/getuser', async (req, res) => {
   })
 })
 
-router.delete('/api/deleteuser', async (req, res) => {
+userRoutes.delete('/api/deleteuser', async (req, res) => {
   const { username } = req.body
+
+  await prisma.matches.deleteMany({
+    where: {
+      OR: [
+        {
+          userone: {
+            username: username,
+          },
+        },
+        {
+          usertwo: {
+            username: username,
+          },
+        },
+      ],
+    },
+  })
 
   const user = await prisma.user.delete({
     where: {
@@ -60,4 +80,4 @@ router.delete('/api/deleteuser', async (req, res) => {
   })
 })
 
-export { router }
+export { userRoutes }

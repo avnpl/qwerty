@@ -65,7 +65,7 @@ matchRoutes.get('/api/user/findmatches', async (req, res) => {
     const intersect = new Set(
       [...match.interIds].filter((x) => currInterSet.has(x))
     )
-    const mfactor = intersect.size / union.size
+    const mfactor = Math.floor((intersect.size / union.size) * 100) / 100
     mfactors.push({
       username: match.username,
       mfactor,

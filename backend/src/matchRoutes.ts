@@ -95,10 +95,14 @@ matchRoutes.get('/api/user/findmatches', async (req, res) => {
       })
     )
   })
+  let result
+  try {
+    result = await prisma.$transaction(queryBatch)
+  } catch (err) {
+    return res.send(err)
+  }
 
-  const result = await prisma.$transaction(queryBatch)
-
-  res.send({
+  return res.send({
     result,
   })
 })

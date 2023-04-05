@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
+import findMatches from './utils/findMatches'
 
 const userRoutes = express.Router()
 const prisma = new PrismaClient()
@@ -28,9 +29,10 @@ userRoutes.post('/api/adduser', async (req, res) => {
       },
     })
   } catch (err) {
-    return res.send(err)
+    console.log(err)
+    return res.status(400).send({ error: err })
   }
-
+  await findMatches(user.username)
   return res.send({
     user,
   })
@@ -51,7 +53,7 @@ userRoutes.get('/api/getuser', async (req, res) => {
       },
     })
   } catch (err) {
-    return res.send({ err })
+    return res.status(400).send({ error: err })
   }
   return res.send({
     user,
@@ -86,7 +88,7 @@ userRoutes.delete('/api/deleteuser', async (req, res) => {
       },
     })
   } catch (err) {
-    return res.send({ err })
+    return res.status(400).send({ error: err })
   }
 
   return res.send({

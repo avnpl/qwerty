@@ -1,110 +1,92 @@
-import { PrismaClient } from '@prisma/client'
+import { MatchStatus, PrismaClient } from '@prisma/client'
 import express from 'express'
 
 const matchRoutes = express.Router()
 const prisma = new PrismaClient()
 
-matchRoutes.get('/api/user/findmatches', async (req, res) => {
-  const { username } = req.body
+matchRoutes.get('/api/user/getmatches', async (req, res) => {
+  const username: string = req.body.username
 
-  const user = await prisma.user.findFirst({
+  const matchesOne = await prisma.matches.findMany({
     where: {
-      username: username,
-    },
-    include: {
-      interests: true,
-    },
-  })
-
-  if (user == null) {
-    return res.send({
-      error: 'Username not found',
-    })
-  }
-
-  const { interests } = user
-
-  const matches = await prisma.user.findMany({
-    where: {
-      username: {
-        not: username,
-      },
-      interests: {
-        some: {
-          OR: interests,
-        },
+      userone: {
+        username: username,
       },
     },
-    include: {
-      interests: true,
+    select: {
+      matchId: true,
+      usertwo: {
+        select: {
+          username: true,
+        },
+      },
+      // statone: true,
+      stattwo: true,
+      mfactor: true,
+      mstatus: true,
+    },
+  })
+  const matchesTwo = await prisma.matches.findMany({
+    where: {
+      usertwo: {
+        username: username,
+      },
+    },
+    select: {
+      matchId: true,
+      userone: {
+        select: {
+          username: true,
+        },
+      },
+      statone: true,
+      // stattwo: true,
+      mfactor: true,
+      mstatus: true,
     },
   })
 
-  const matchesFound: { username: string; interIds: number[] }[] = []
-  matches.map((param) => {
-    const { username, interests } = param
-    const interIds: number[] = []
-    interests.map((interObj) => {
-      const { interestId } = interObj
-      interIds.push(interestId)
+  const matches: {
+    matchId: string
+    mfactor: number
+    mstatus: MatchStatus
+    status: boolean
+    username: string
+  }[] = []
+
+  const _matches = [...matchesOne, ...matchesTwo]
+    .sort((a, b) => {
+      return b.mfactor - a.mfactor
     })
-    const userIntersObj = { username, interIds }
-    matchesFound.push(userIntersObj)
-  })
-
-  const currUserInters: number[] = []
-  interests.map((param) => {
-    const { interestId } = param
-    currUserInters.push(interestId)
-  })
-
-  const mfactors: { username: string; mfactor: number }[] = []
-  const currInterSet = new Set(currUserInters)
-  matchesFound.map((match) => {
-    const union = new Set([...currUserInters, ...match.interIds])
-    const intersect = new Set(
-      [...match.interIds].filter((x) => currInterSet.has(x))
-    )
-    const mfactor = Math.floor((intersect.size / union.size) * 100) / 100
-    mfactors.push({
-      username: match.username,
-      mfactor,
+    .map((item) => {
+      const { matchId, mfactor, mstatus } = item
+      const basic = {
+        matchId,
+        mfactor,
+        mstatus,
+      }
+      if ('usertwo' in item) {
+        const { stattwo, usertwo } = item
+        const obj = {
+          ...basic,
+          status: stattwo,
+          username: usertwo.username,
+          currUser: 1,
+        }
+        matches.push(obj)
+      } else {
+        const { statone, userone } = item
+        const obj = {
+          ...basic,
+          status: statone,
+          username: userone.username,
+          currUser: 2,
+        }
+        matches.push(obj)
+      }
     })
-  })
 
-  const queryBatch: any[] = []
-  mfactors.map((item) => {
-    queryBatch.push(
-      prisma.matches.create({
-        data: {
-          mfactor: item.mfactor,
-          mstatus: 'MATCHED',
-          statone: false,
-          stattwo: false,
-          userone: {
-            connect: {
-              username: username,
-            },
-          },
-          usertwo: {
-            connect: {
-              username: item.username,
-            },
-          },
-        },
-      })
-    )
-  })
-  let result
-  try {
-    result = await prisma.$transaction(queryBatch)
-  } catch (err) {
-    return res.send(err)
-  }
-
-  return res.send({
-    result,
-  })
+  return res.send({ matches })
 })
 
 export { matchRoutes }

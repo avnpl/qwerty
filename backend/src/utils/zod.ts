@@ -10,3 +10,13 @@ export const sendReqBodySchema = z.object({
     })
   ),
 })
+
+export const acceptReqBodySchema = z.object({
+  matches: z.array(
+    z.object({
+      matchId: z.string(),
+      username: z.string(),
+      accepted: z.boolean(),
+    })
+  ),
+})

@@ -1,6 +1,6 @@
 import { MatchStatus, PrismaClient } from '@prisma/client'
 import express from 'express'
-import { sendReqBodySchema } from './utils/zod'
+import { acceptReqBodySchema, sendReqBodySchema } from './utils/zod'
 
 const matchRoutes = express.Router()
 const prisma = new PrismaClient()
@@ -311,6 +311,49 @@ matchRoutes.post('/api/sendrequest', async (req, res) => {
           })
         )
       }
+    }
+  })
+
+  const result = await prisma.$transaction(reqBatch)
+
+  return res.send({ result })
+})
+
+matchRoutes.post('/api/acceptrequests', async (req, res) => {
+  const parseRes = acceptReqBodySchema.safeParse(req.body)
+  if (!parseRes.success) {
+    return res.send({ err: parseRes.error })
+  }
+  const {
+    data: { matches },
+  } = parseRes
+
+  let reqBatch: any[] = []
+  matches.map((match) => {
+    const whereObj = {
+      matchId: match.matchId,
+    }
+
+    if (match.accepted) {
+      reqBatch.push(
+        prisma.matches.update({
+          where: whereObj,
+          data: {
+            mstatus: 'SUCCESS',
+            statone: true,
+            stattwo: true,
+          },
+        })
+      )
+    } else {
+      reqBatch.push(
+        prisma.matches.update({
+          where: whereObj,
+          data: {
+            mstatus: 'REJECTED',
+          },
+        })
+      )
     }
   })
 

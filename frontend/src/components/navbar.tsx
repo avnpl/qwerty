@@ -1,4 +1,5 @@
 import { useTheme } from 'next-themes'
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme()
@@ -7,6 +8,16 @@ export default function Navbar() {
     <nav className="max-w-5xl w-full lg:py-6 py-4">
       <div className="flex flex-row justify-between">
         <span className="font-mono text-5xl">CodePartner</span>
+        <ul>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+        </ul>
         <div className="my-auto mx-2">
           <div>
             {theme === 'dark' ? (

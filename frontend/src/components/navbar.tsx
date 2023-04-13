@@ -10,12 +10,17 @@ export default function Navbar() {
         <span className="font-mono text-5xl">CodePartner</span>
         <ul>
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/">Home</Link>
           </li>
         </ul>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/register">Register</Link>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <Link to="/login">Login</Link>
           </li>
         </ul>
         <div className="my-auto mx-2">

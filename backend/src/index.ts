@@ -7,9 +7,11 @@ import { userRoutes } from './userRoutes'
 const prisma = new PrismaClient()
 const app = express()
 const port = process.env.PORT
+const cors = require('cors')
 
-app.use(morgan('dev'))
+app.use(cors())
 app.use(express.json())
+app.use(morgan('dev'))
 app.use(userRoutes)
 app.use(matchRoutes)
 

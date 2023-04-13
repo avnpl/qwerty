@@ -38,7 +38,7 @@ userRoutes.post('/api/adduser', async (req, res) => {
   })
 })
 
-userRoutes.get('/api/getuser', async (req, res) => {
+userRoutes.post('/api/getuser', async (req, res) => {
   const { username, password } = req.body
 
   let user

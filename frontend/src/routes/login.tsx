@@ -23,13 +23,18 @@ export const loginAction = async ({ request }: any) => {
   if (!result.user) {
     return { error: 'Invalid credentials' }
   }
+  const userObj = {
+    username: result.user.username,
+    password: result.user.password,
+  }
 
-  localStorage.setItem('user', JSON.stringify({ ...result.user }))
+  localStorage.setItem('user', JSON.stringify({ ...userObj }))
   return redirect('/')
 }
 
 export default function Login() {
   const data: any = useActionData()
+
   return (
     <Form method="post" action="/login" id="login-form" className="space-y-5">
       <p>

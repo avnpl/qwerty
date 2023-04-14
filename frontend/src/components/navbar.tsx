@@ -1,5 +1,5 @@
 import { useTheme } from 'next-themes'
-import { Link } from 'react-router-dom'
+import { Link, redirect } from 'react-router-dom'
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme()
@@ -21,6 +21,19 @@ export default function Navbar() {
         <ul>
           <li>
             <Link to="/login">Login</Link>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                localStorage.removeItem('user')
+                return redirect('/login')
+              }}
+            >
+              Log Out
+            </button>
           </li>
         </ul>
         <div className="my-auto mx-2">

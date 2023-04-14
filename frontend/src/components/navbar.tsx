@@ -1,15 +1,23 @@
 import { useTheme } from 'next-themes'
-import { useState } from 'react'
+import { useContext } from 'react'
 import { Link, redirect } from 'react-router-dom'
+import { LoginContext } from '../app'
+import Error from '../components/error'
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme()
-  const [loggedIn, setLoggedIn] = useState(!!localStorage.getItem('user'))
+  const ctx = useContext(LoginContext)
+  if (ctx === null) {
+    return <Error />
+  }
+  const { loggedIn, setLoggedIn } = ctx
 
   return (
     <nav className="max-w-5xl w-full lg:py-6 py-4">
       <div className="flex flex-row justify-between">
-        <span className="font-mono text-5xl">CodePartner</span>
+        <span className="font-mono text-5xl">
+          <Link to="/">CodePartner</Link>
+        </span>
         {!loggedIn ? (
           <>
             <ul>

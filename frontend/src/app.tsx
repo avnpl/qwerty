@@ -38,6 +38,7 @@ export function App() {
       </Route>
     )
   )
+
   return (
     <div className="flex justify-center">
       <div className="max-w-5xl w-full lg:py-6 py-4">

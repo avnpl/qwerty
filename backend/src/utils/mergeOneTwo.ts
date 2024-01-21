@@ -12,15 +12,15 @@ export const mergeOneTwo = (matchesOne: any, matchesTwo: any) => {
     .sort((a, b) => {
       return b.mfactor - a.mfactor
     })
-    .map((item) => {
-      const { matchId, mfactor, mstatus } = item
+    .map((matchObj) => {
+      const { matchId, mfactor, mstatus } = matchObj
       const basic = {
         matchId,
         mfactor,
         mstatus,
       }
-      if ('usertwo' in item) {
-        const { usertwo } = item
+      if ('usertwo' in matchObj) {
+        const { usertwo } = matchObj
         const obj = {
           ...basic,
           username: usertwo.username,
@@ -28,7 +28,7 @@ export const mergeOneTwo = (matchesOne: any, matchesTwo: any) => {
         }
         matches.push(obj)
       } else {
-        const { userone } = item
+        const { userone } = matchObj
         const obj = {
           ...basic,
           username: userone.username,

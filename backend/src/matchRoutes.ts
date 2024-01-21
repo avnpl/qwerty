@@ -56,7 +56,7 @@ matchRoutes.get('/api/getallmatches', async (req, res) => {
   return res.send({ matches: mergeOneTwo(matchesOne, matchesTwo) })
 })
 
-matchRoutes.get('/api/getnewmatches', async (req, res) => {
+matchRoutes.post('/api/getnewmatches', async (req, res) => {
   const username: string = req.body.username
 
   const matchesOne = await prisma.matches.findMany({

@@ -7,8 +7,15 @@ const prisma = new PrismaClient()
 
 userRoutes.get('/', (req, res) => {
   return res.send({
-    message: 'bruh',
+    message: 'Server is up!',
   })
+})
+
+userRoutes.get('/serverkill', (req, res) => {
+  res.send({
+    message: 'Server is shutting down!',
+  })
+  process.exit(0)
 })
 
 userRoutes.post('/api/adduser', async (req, res) => {
@@ -53,6 +60,7 @@ userRoutes.post('/api/getuser', async (req, res) => {
       },
     })
   } catch (err) {
+    console.log(err)
     return res.status(400).send({ error: err })
   }
   return res.send({

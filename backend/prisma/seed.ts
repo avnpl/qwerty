@@ -4,78 +4,144 @@ const prisma = new PrismaClient()
 
 const interestData: Prisma.InterestsCreateInput[] = [
   { interestName: 'AIML' },
-  { interestName: 'WEBDEV' },
-  { interestName: 'FRONTEND' },
   { interestName: 'BACKEND' },
-  { interestName: 'FULLSTACK' },
+  { interestName: 'MOBILE' },
+  { interestName: 'DEVOPS' },
+  { interestName: 'TESTING' },
+  { interestName: 'UIUX' },
+  { interestName: 'ANALYTICS' },
+  { interestName: 'FRONTEND' },
+  { interestName: 'WEBDEV' },
 ]
 
 const userData: Prisma.UserCreateInput[] = [
   {
-    email: 'alvin.pauly@vit.edu.in',
-    name: 'Alvin Pauly',
-    username: 'avnpl',
-    password: 'avnplpass',
-    bio: 'Hello from avnpl',
+    email: 'aarav.sharma@example.com',
+    name: 'Aarav Sharma',
+    username: 'aaravsharma',
+    password: 'aaravsharmapass',
+    bio: 'Hello from Aarav Sharma',
+    interests: {
+      connect: [{ interestName: 'AIML' }, { interestName: 'WEBDEV' }],
+    },
+  },
+  {
+    email: 'aisha.patel@example.com',
+    name: 'Aisha Patel',
+    username: 'aishapatel',
+    password: 'aishapatelpass',
+    bio: 'Hello from Aisha Patel',
+    interests: {
+      connect: [{ interestName: 'FRONTEND' }, { interestName: 'DEVOPS' }],
+    },
+  },
+  {
+    email: 'rahul.gupta@example.com',
+    name: 'Rahul Gupta',
+    username: 'rahulgupta',
+    password: 'rahulguptapass',
+    bio: 'Hello from Rahul Gupta',
+    interests: {
+      connect: [{ interestName: 'ANALYTICS' }, { interestName: 'BACKEND' }],
+    },
+  },
+  {
+    email: 'priya.sharma@example.com',
+    name: 'Priya Sharma',
+    username: 'priyasharma',
+    password: 'priyasharmapass',
+    bio: 'Hello from Priya Sharma',
+    interests: {
+      connect: [
+        { interestName: 'AIML' },
+        { interestName: 'ANALYTICS' },
+        { interestName: 'UIUX' },
+      ],
+    },
+  },
+  {
+    email: 'akash.verma@example.com',
+    name: 'Akash Verma',
+    username: 'akashverma',
+    password: 'akashvermapass',
+    bio: 'Hello from Akash Verma',
+    interests: {
+      connect: [{ interestName: 'AIML' }, { interestName: 'UIUX' }],
+    },
+  },
+  {
+    email: 'ananya.das@example.com',
+    name: 'Ananya Das',
+    username: 'ananyadas',
+    password: 'ananyadaspass',
+    bio: 'Hello from Ananya Das',
     interests: {
       connect: [
         { interestName: 'BACKEND' },
-        { interestName: 'WEBDEV' },
-        { interestName: 'FULLSTACK' },
+        { interestName: 'TESTING' },
+        { interestName: 'MOBILE' },
       ],
     },
   },
   {
-    email: 'kaartik.nayak@vit.edu.in',
-    name: 'Kartik Nayak',
-    username: 'kanay',
-    password: 'kanaypass',
-    bio: 'Hello from kanay',
+    email: 'kunal.singh@example.com',
+    name: 'Kunal Singh',
+    username: 'kunalsingh',
+    password: 'kunalsinghpass',
+    bio: 'Hello from Kunal Singh',
     interests: {
       connect: [
-        { interestName: 'WEBDEV' },
+        { interestName: 'AIML' },
+        { interestName: 'ANALYTICS' },
+        { interestName: 'BACKEND' },
+        { interestName: 'DEVOPS' },
+      ],
+    },
+  },
+  {
+    email: 'swati.agarwal@example.com',
+    name: 'Swati Agarwal',
+    username: 'swatiagarwal',
+    password: 'swatiagarwalpass',
+    bio: 'Hello from Swati Agarwal',
+    interests: {
+      connect: [
         { interestName: 'FRONTEND' },
-        { interestName: 'FULLSTACK' },
+        { interestName: 'WEBDEV' },
+        { interestName: 'UIUX' },
+        { interestName: 'MOBILE' },
+        { interestName: 'TESTING' },
       ],
     },
   },
   {
-    email: 'viren.rajhauns@vit.edu.in',
-    name: 'Viren Rajhauns',
-    username: 'viraj',
-    password: 'virajpass',
-    bio: 'Hello from viraj',
+    email: 'vikas.yadav@example.com',
+    name: 'Vikas Yadav',
+    username: 'vikasyadav',
+    password: 'vikasyadavpass',
+    bio: 'Hello from Vikas Yadav',
     interests: {
-      connectOrCreate: [
-        {
-          where: { interestName: 'AIML' },
-          create: { interestName: 'AIML' },
-        },
-        {
-          where: { interestName: 'BRUH' },
-          create: { interestName: 'BRUH' },
-        },
+      connect: [
+        { interestName: 'DEVOPS' },
+        { interestName: 'WEBDEV' },
+        { interestName: 'MOBILE' },
       ],
     },
   },
   {
-    email: 'rohini.malladi@vit.edu.in',
-    name: 'Rohini Malladi',
-    username: 'romal',
-    password: 'romalpass',
-    bio: 'Hello from romal',
+    email: 'radha.mishra@example.com',
+    name: 'Radha Mishra',
+    username: 'radhamishra',
+    password: 'radhamishrapass',
+    bio: 'Hello from Radha Mishra',
     interests: {
-      connect: [{ interestName: 'AIML' }, { interestName: 'FULLSTACK' }],
-    },
-  },
-  {
-    email: 'monke@vit.edu.in',
-    name: 'Monke',
-    username: 'monke',
-    password: 'monkepass',
-    bio: 'Hello from monke',
-    interests: {
-      connect: [{ interestName: 'WEBDEV' }, { interestName: 'FULLSTACK' }],
+      connect: [
+        { interestName: 'AIML' },
+        { interestName: 'ANALYTICS' },
+        { interestName: 'FRONTEND' },
+        { interestName: 'BACKEND' },
+        { interestName: 'DEVOPS' },
+      ],
     },
   },
 ]
@@ -98,22 +164,6 @@ async function main() {
     })
     console.log(`Created ${user.username} with id: ${user.userId}`)
   }
-
-  console.log('Disconnecting viraj test interest')
-
-  const viraj = await prisma.user.update({
-    where: { username: 'viraj' },
-    data: {
-      interests: {
-        disconnect: { interestName: 'BRUH' },
-      },
-    },
-    include: {
-      interests: true,
-    },
-  })
-
-  console.log(viraj)
 }
 
 main()

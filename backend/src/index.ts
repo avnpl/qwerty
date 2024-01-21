@@ -3,6 +3,7 @@ import express from 'express'
 import morgan from 'morgan'
 import { matchRoutes } from './matchRoutes'
 import { userRoutes } from './userRoutes'
+require('dotenv').config()
 
 const prisma = new PrismaClient()
 const app = express()
